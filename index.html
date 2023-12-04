@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header>
+        <div class="date-board">
+            <div class="time"></div>
+            <div class="date"></div>
+        </div>
+    </header>
+    <main>
+        <div class="title-box">
+            <h1 class="title">John Doe's Dashboard</h1>
+            <input type="text" class="title-input hidden">
+        </div>
+        <div class="widgets">
+            <div class="shortcuts">
+                <h2>Snabblänkar</h2>
+                <div class="links">
+                    <div class="link">
+                        <h4>Google</h4>
+                        <i class="close">X</i>
+                    </div>
+                </div>
+                <div class="add">
+                    <button class="add-link">Lägg till länk</button>
+                    <input type="text" class="link-input hidden" placeholder="Enter URL:">
+                </div>
+            </div>
+            <div class="weather">
+                <h2>Väder</h2>
+            </div>
+            <div class="whatever">
+                <h2>[...]</h2>
+            </div>
+            <div class="notes">
+                <h2>Anteckningar</h2>
+                <textarea name="text-area" id="text-area"></textarea>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div>
+            <button class="new-background">Slumpa ny bakgrund</button>
+        </div>
+    </footer>
+
+    <script src="./index.js"></script>
+</body>
+</html>
