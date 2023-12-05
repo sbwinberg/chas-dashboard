@@ -20,7 +20,8 @@ function addFromStorage() {
     if(localStorage.getItem('title')){
         title.innerText = localStorage.getItem('title');
     }
-    if(localStorage.getItem('links')){
+    if(localStorage.getItem('links') && localStorage.getItem('links') != '[object Object]'){
+        console.log(localStorage.getItem('links'))
         links = JSON.parse(localStorage.getItem('links'));
         links.forEach(obj => {
             console.log(obj)
@@ -154,6 +155,7 @@ linkList.addEventListener('click', (e) => {
         links = links.filter((obj) => {
             return obj.link != e.target.getAttribute('data-id')
         })
+        links = JSON.stringify(links)
         localStorage.setItem('links', links)
         e.target.parentElement.remove();
     }
@@ -161,5 +163,67 @@ linkList.addEventListener('click', (e) => {
 
 
 
+// FUNCTION WEATHER
+///////////////////
+
+// Get position via geolocation api
+navigator.geolocation.getCurrentPosition((position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    getWeather(lat, lon)
+});
 
 
+weather_api = '25a21f44ab1f402584c160402232711'
+
+async function getWeather(lat, lon){
+    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3`)
+    const data = await response.json();
+    console.log(data);
+    displayWeather(data)
+}
+
+function displayWeather(data){
+    const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
+    const container = document.querySelector('.all-weathers')
+    const city = document.querySelector('.location');
+    city.innerText = data.location.name;
+    let short = data.forecast.forecastday;
+
+    for(obj in data.forecast.forecastday){
+        let day;
+
+        console.log(obj)
+        if(obj == 0){ day = 'Idag';}
+        else if (obj == 1){ day = 'Imorgon'}
+        if (obj == 2){
+            const currentDay = new Date(short[obj].date);
+            day = weekdays[currentDay.getDay()]
+        }
+        console.log(day)
+        let tmp = `
+            <div class="weater-today weather-container">
+                <div class='image-container'> 
+                    <img src=${short[obj].day.condition.icon} alt=${short[obj].day.condition.text} class="weather-image">
+                </div>
+                <div class="weather-info">
+                    <div class="day">${day}</div>
+                    <div class="temp-and-such">
+                        <div class="temp">${short[obj].day.avgtemp_c}&deg;C</div>
+                        <div class="such">${short[obj].day.condition.text}</div>
+                    </div>
+                </div>
+            </div>
+        `
+        container.innerHTML += tmp
+    }
+}
+
+
+// NEWS API
+
+// async function getNews() {
+//     let api = "70537e11-7959-4ae7-aaf4-bc4ccbc3b924"
+//     const response = await fetch('http://eventregistry.org/api/v1/minuteStreamArticlesapiKEY=70537e11-7959-4ae7-aaf4-bc4ccbc3b924')
+//     console.log(response)
+// }

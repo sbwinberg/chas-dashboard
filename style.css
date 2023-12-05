@@ -1,6 +1,7 @@
 *{
     margin: 0;
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 body{
@@ -104,6 +105,39 @@ main{
     cursor: pointer;
 }
 
+/* WEATHER */
+.weather-container{
+    width: 100%;
+    background-color: lightgray;
+    border-radius: 15px;
+    display: flex;
+}
+
+.image-container {
+    width: 4rem;
+    aspect-ratio: 1/1;
+}
+
+.weather-image {
+    width: 100%;
+}
+
+.weather-info{
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.temp-and-such{
+    display: flex;
+    /* gap: 1rem; */
+}
+
+.temp-and-such > * {
+    background-color: #fff;
+    padding: .15rem .5rem;
+    border-radius: 5px;
+}
 
 /* FOOTER */
 footer{
