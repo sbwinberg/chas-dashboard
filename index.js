@@ -21,12 +21,13 @@ function addFromStorage() {
         title.innerText = localStorage.getItem('title');
     }
     if(localStorage.getItem('links') && localStorage.getItem('links') != '[object Object]'){
-        console.log(localStorage.getItem('links'))
         links = JSON.parse(localStorage.getItem('links'));
         links.forEach(obj => {
-            console.log(obj)
             displayLink(obj.link, obj.name)
         });
+    }
+    if(localStorage.getItem('notes')){
+        text_area.value = localStorage.getItem('notes');
     }
     setDate();
     setTime();
@@ -89,17 +90,12 @@ const linkInput = document.querySelector('.link-input');
 const regexURL = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
 let links = [];
 
-//Show input box on double click
+
 addLinkBtn.addEventListener('click', () => {
     linkInput.classList.remove('hidden');
     linkInput.focus();
 })
 
-
-// Check for enter-key
-// Check if input field is empty
-// Check if input is valid URL (with regex)
-// Add link to array
 
 // FIX MESSY ASS IF STATEMENTS
 let url;
@@ -121,7 +117,6 @@ linkInput.addEventListener('keydown', (e) => {
         linkInput.placeholder = 'Enter a name:'
         
     } else if(linkInput.placeholder == 'Enter a name:'){
-        // UPDATE LINKS ARRAY AND LOCAL STORAGE
         let name = linkInput.value;
         let link = {
             'link' : `${url}`,
@@ -179,7 +174,6 @@ weather_api = '25a21f44ab1f402584c160402232711'
 async function getWeather(lat, lon){
     const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3`)
     const data = await response.json();
-    console.log(data);
     displayWeather(data)
 }
 
@@ -193,14 +187,12 @@ function displayWeather(data){
     for(obj in data.forecast.forecastday){
         let day;
 
-        console.log(obj)
         if(obj == 0){ day = 'Idag';}
         else if (obj == 1){ day = 'Imorgon'}
         if (obj == 2){
             const currentDay = new Date(short[obj].date);
             day = weekdays[currentDay.getDay()]
         }
-        console.log(day)
         let tmp = `
             <div class="weater-today weather-container">
                 <div class='image-container'> 
@@ -218,6 +210,17 @@ function displayWeather(data){
         container.innerHTML += tmp
     }
 }
+
+
+// NOTES
+// SAVES ON FOCUS OUT, UPDATING VIA KEYBOARD LOSES EVERYTHING WRITTEN
+const text_area = document.getElementById('text-area');
+text_area.addEventListener('focusout', () => {
+    const notes = text_area.value;
+    localStorage.setItem('notes', notes);
+})
+
+
 
 
 // NEWS API
