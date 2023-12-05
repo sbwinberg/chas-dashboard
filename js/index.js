@@ -1,3 +1,12 @@
+// require('dotenv').config()
+// TODO UNSPLASH API, IMPORT, USE PICTURES AND ADD SEARCH OPTION
+import { Unsplash } from "./unsplash";
+import dotenv from 'dotenv'
+dotenv.config();
+
+const unsplash = new Unsplash(process.env.UNSPLASH_ACCESS_KEY)
+await unsplash.getPhoto('file', 'forest')
+
 // TODO
 //     Extra utmaning: Hämta länkens favicon och visa som bild i dashboarden.
     
@@ -155,7 +164,6 @@ linkList.addEventListener('click', (e) => {
         e.target.parentElement.remove();
     }
 });
-
 
 
 // FUNCTION WEATHER
