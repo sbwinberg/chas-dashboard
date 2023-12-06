@@ -1,11 +1,4 @@
-// require('dotenv').config()
-// TODO UNSPLASH API, IMPORT, USE PICTURES AND ADD SEARCH OPTION
-import { Unsplash } from "./unsplash";
-import dotenv from 'dotenv'
-dotenv.config();
-
-const unsplash = new Unsplash(process.env.UNSPLASH_ACCESS_KEY)
-await unsplash.getPhoto('file', 'forest')
+// import {} from 'dotenv/config'
 
 // TODO
 //     Extra utmaning: Hämta länkens favicon och visa som bild i dashboarden.
@@ -105,7 +98,6 @@ addLinkBtn.addEventListener('click', () => {
     linkInput.focus();
 })
 
-
 // FIX MESSY ASS IF STATEMENTS
 let url;
 linkInput.addEventListener('keydown', (e) => {
@@ -131,6 +123,7 @@ linkInput.addEventListener('keydown', (e) => {
             'link' : `${url}`,
             'name' : `${name}`
         }
+        console.log(typeof links)
         links.push(link);
         storageLinks = JSON.stringify(links)
         localStorage.setItem('links', storageLinks)
@@ -159,12 +152,18 @@ linkList.addEventListener('click', (e) => {
         links = links.filter((obj) => {
             return obj.link != e.target.getAttribute('data-id')
         })
-        links = JSON.stringify(links)
         localStorage.setItem('links', links)
         e.target.parentElement.remove();
     }
 });
 
+// NOTES
+// SAVES ON FOCUS OUT, UPDATING VIA KEYBOARD LOSES EVERYTHING WRITTEN
+const text_area = document.getElementById('text-area');
+text_area.addEventListener('focusout', () => {
+    const notes = text_area.value;
+    localStorage.setItem('notes', notes);
+})
 
 // FUNCTION WEATHER
 ///////////////////
@@ -177,7 +176,7 @@ navigator.geolocation.getCurrentPosition((position) => {
 });
 
 
-weather_api = '25a21f44ab1f402584c160402232711'
+const weather_api = '25a21f44ab1f402584c160402232711'
 
 async function getWeather(lat, lon){
     const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3`)
@@ -192,7 +191,7 @@ function displayWeather(data){
     city.innerText = data.location.name;
     let short = data.forecast.forecastday;
 
-    for(obj in data.forecast.forecastday){
+    for(let obj in data.forecast.forecastday){
         let day;
 
         if(obj == 0){ day = 'Idag';}
@@ -220,16 +219,16 @@ function displayWeather(data){
 }
 
 
-// NOTES
-// SAVES ON FOCUS OUT, UPDATING VIA KEYBOARD LOSES EVERYTHING WRITTEN
-const text_area = document.getElementById('text-area');
-text_area.addEventListener('focusout', () => {
-    const notes = text_area.value;
-    localStorage.setItem('notes', notes);
-})
 
+// FUNCTION BACKGROUND IMAGE
+// unsplash.photos.getPhoto("pFqrYbhIAXs");
+// import { createApi } from 'unsplash-js';
+// import nodeFetch from 'node-fetch';
 
-
+// const unsplash = createApi({
+//   accessKey: 'MY_ACCESS_KEY',
+//   fetch: nodeFetch,
+// });
 
 // NEWS API
 
