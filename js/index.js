@@ -43,35 +43,32 @@ const dateArea = document.querySelector('.date')
 
 function setTime() {
     const timeNow = new Date();
-    const timeString = timeNow.toLocaleTimeString()
+    const timeString = timeNow.toLocaleTimeString();
     timeArea.innerText = timeString;
 }
 
 
 function setDate() {
-    const months = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December']
+    const months = ['December','Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November']
     const dateNow = new Date();
     const day = dateNow.getDate();
     const monthIndex = dateNow.getMonth();
     const month = months[monthIndex]
     const year = dateNow.getFullYear();
-    const todaysDate = `${day} ${month} ${year}`;
-    dateArea.innerText = todaysDate;
+    dateArea.innerText = `${day} ${month} ${year}`;
 }
 
 
-// CHANGE TITLE ON DOUBLE CLICK
+// FUNCTION CHANGE TITLE ON DOUBLE CLICK
 const title = document.querySelector('.title');
 const titleInput = document.querySelector('.title-input')
 
-// Show input box on double click
 title.addEventListener('dblclick', () => {
     titleInput.classList.remove('hidden');
     titleInput.focus();
 })
 
 
-// When enter is pressed get input value, update local storage and title then remove input box
 titleInput.addEventListener('keydown', (e) => {
     if(e.keyCode === 13){
         let newTitle = titleInput.value;
@@ -105,7 +102,6 @@ linkInput.addEventListener('keydown', (e) => {
     
     if(linkInput.placeholder != 'Enter a name:'){
         url = linkInput.value.toLowerCase();
-        console.log(url)
     }
 
     if(url == '' && linkInput.placeholder != 'Enter a name:'){
@@ -123,7 +119,6 @@ linkInput.addEventListener('keydown', (e) => {
             'link' : `${url}`,
             'name' : `${name}`
         }
-        console.log(typeof links)
         links.push(link);
         storageLinks = JSON.stringify(links)
         localStorage.setItem('links', storageLinks)
@@ -164,6 +159,7 @@ text_area.addEventListener('focusout', () => {
     const notes = text_area.value;
     localStorage.setItem('notes', notes);
 })
+
 
 // FUNCTION WEATHER
 ///////////////////
@@ -221,14 +217,38 @@ function displayWeather(data){
 
 
 // FUNCTION BACKGROUND IMAGE
-// unsplash.photos.getPhoto("pFqrYbhIAXs");
-// import { createApi } from 'unsplash-js';
-// import nodeFetch from 'node-fetch';
+let data;
+async function getImage(url = `https://api.unsplash.com/photos/random?query=forest&count=10&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
+    const response = await fetch(url);
+    data = await response.json();
+    console.log(data)
+    displayBackground(data)
+}
+getImage();
 
-// const unsplash = createApi({
-//   accessKey: 'MY_ACCESS_KEY',
-//   fetch: nodeFetch,
-// });
+function displayBackground(data) {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const index = Math.floor(Math.random() * data.length);
+    const bg = `url('${data[index].urls.raw}&h=${h}&w=${w}&dpr=2')`;
+    document.body.style.setProperty('--bg-img', bg);
+}
+
+const bgBtn = document.querySelector('.new-background');
+bgBtn.addEventListener('click', () => {
+    displayBackground(data);
+})
+
+
+// FUNCTION BG QUERY
+const queryBtn = document.querySelector('.query-btn');
+const queryInput = document.querySelector('.query-input')
+
+queryBtn.addEventListener('click', () => {
+    queryInput.classList.remove('hidden');
+})
+
+
 
 // NEWS API
 

@@ -1,3 +1,12 @@
+:root {
+    --bg-img: url('');
+    --bg: rgba(240, 240, 240, 0.6)
+}
+
+.bg {
+    background-color: var(--bg);
+}
+
 *{
     margin: 0;
     box-sizing: border-box;
@@ -10,6 +19,8 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-image: var(--bg-img);
+    background-size: cover;
 }
 
 /* HEADER */
@@ -146,8 +157,21 @@ footer{
     justify-content: center;
 }
 
-.new-background {
+.btn{
     padding: .5rem 2rem;
     border-radius: 10px;
     border: 1px solid black;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.query{
+    position: relative;
+}
+
+.query-input {
+    position: absolute;
 }
