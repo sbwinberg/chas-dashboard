@@ -1,8 +1,8 @@
 :root {
-    --bg-img: url('');
-    --bg: rgba(255, 255, 255, 0.5);
-    --widget-color: rgba(255, 255, 255, 0.65);
-    --bg-blur: 6px;
+    --bg-img: url('./img/default.jpg');
+    --bg: rgba(255, 255, 255, 0.6);
+    --widget-color: rgba(255, 255, 255, 0.85);
+    --bg-blur: 3px;
     --widget-title: 1.8rem;
 }
 
@@ -24,6 +24,7 @@ body{
     justify-content: space-between;
     background-image: var(--bg-img);
     background-size: cover;
+    background-position: center;
 }
 
 /* GENERAL CLASSES */
@@ -34,6 +35,10 @@ body{
 
 .hidden{
     display: none;
+}
+
+.hide {
+    visibility: hidden;
 }
 
 /* HEADER */
@@ -49,7 +54,7 @@ header{
     padding: .75rem 4rem;
     display: flex;
     /* FIX DYNAMIC GAP */
-    gap: 1rem; 
+    gap: 2rem; 
 }
 
 .time {
@@ -60,6 +65,7 @@ header{
 .wtitle {
     font-size: var(--widget-title);
     font-weight: 100;
+    margin-bottom: 1rem;
 }
 
 .witem {
@@ -69,14 +75,14 @@ header{
 
 .widgets{
     width: 100%;
-    height: 400px;
+    height: 500px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
 }
 
 .widgets > * {
-    padding: 1rem 0.5rem 1rem;
+    padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,7 +103,7 @@ main{
 .title {
     user-select: none;
     font-size: 3rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .title-box {
@@ -106,7 +112,10 @@ main{
 
 .title-input {
     position: absolute;
-    
+    background-color: var(--widget-color);
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    font-size: 3rem;
     inset: 0 0 0 0;
 }
 
@@ -126,6 +135,7 @@ main{
 
 .links{
     width: 100%;
+    margin-bottom: auto;
 }
 
 .link {
@@ -143,42 +153,46 @@ main{
 
 
 /* WEATHER */
-.weather-container{
-    display: flex;
-}
+.weather-container{display: flex}
+.day{font-weight: bold}
 
+.weather-image {width: 100%}
 .image-container {
     width: 4rem;
     aspect-ratio: 1/1;
 }
 
-.weather-image {
+.all-weathers {
+    margin-bottom: auto;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
 }
 
 .weather-info{
-    font-weight: bold;
     display: flex;
     flex-direction: column;
 }
 
 .temp-and-such{
     display: flex;
-    /* gap: 1rem; */
+    font-size: .9rem;
 }
 
 .temp-and-such > * {
-    background-color: #fff;
+    background-color: var(--widget-color);
     padding: .15rem .5rem;
 }
 
 
+
+
 /* CAT FACTS */
 .fact-container{
-    background-color: #fff;
     width: 100%;
     height: fit-content;
-    margin: 1rem auto auto;
+    margin-bottom: auto;
     padding: .5rem .5rem;
 }
 

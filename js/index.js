@@ -65,21 +65,33 @@ const titleInput = document.querySelector('.title-input')
 
 title.addEventListener('dblclick', () => {
     titleInput.classList.remove('hidden');
+    title.classList.add('hide')
     titleInput.focus();
 })
 
 
 titleInput.addEventListener('keydown', (e) => {
     if(e.keyCode === 13){
-        let newTitle = titleInput.value;
-        localStorage.setItem('title', newTitle)
-        title.innerText = localStorage.getItem('title');
-        titleInput.classList.add('hidden');
+        updateTitle();
     }
+
+})
+
+titleInput.addEventListener('focusout', () => {
+    updateTitle();
+})
+
+function updateTitle(){
+    let newTitle = titleInput.value;
+    localStorage.setItem('title', newTitle)
+    title.innerText = localStorage.getItem('title');
+    titleInput.classList.add('hidden');
+    title.classList.remove('hide')
+
     if(titleInput.value == ''){
         title.innerText = "John Doe's Dashboard"
     }
-})
+}
 
 
 // FUNCTION ADD LINKS
@@ -174,9 +186,10 @@ navigator.geolocation.getCurrentPosition((position) => {
 
 const weather_api = '25a21f44ab1f402584c160402232711'
 
-async function getWeather(lat, lon){
-    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3`)
+async function getWeather(lat, lon, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
+    const response = await fetch(url)
     const data = await response.json();
+    console.log(data)
     displayWeather(data)
 }
 
@@ -186,8 +199,12 @@ function displayWeather(data){
     const city = document.querySelector('.location');
     city.innerText = data.location.name;
     let short = data.forecast.forecastday;
-
+    
     for(let obj in data.forecast.forecastday){
+        const fullWeather = short[obj].day.condition.text.split(' ');
+        let shortWeather = fullWeather[fullWeather.length -1]
+        shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1)
+
         let day;
 
         if(obj == 0){ day = 'Idag';}
@@ -196,8 +213,8 @@ function displayWeather(data){
             const currentDay = new Date(short[obj].date);
             day = weekdays[currentDay.getDay()]
         }
-        let tmp = `
-            <div class="weater-today weather-container witem">
+        let tmp = 
+        `<div class="weater-today weather-container witem">
                 <div class='image-container'> 
                     <img src=${short[obj].day.condition.icon} alt=${short[obj].day.condition.text} class="weather-image">
                 </div>
@@ -205,11 +222,10 @@ function displayWeather(data){
                     <div class="day">${day}</div>
                     <div class="temp-and-such">
                         <div class="temp">${short[obj].day.avgtemp_c}&deg;C</div>
-                        <div class="such">${short[obj].day.condition.text}</div>
+                        <div class="such">${shortWeather}</div>
                     </div>
                 </div>
-            </div>
-        `
+            </div>`
         container.innerHTML += tmp
     }
 }
