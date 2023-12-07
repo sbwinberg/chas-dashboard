@@ -1,16 +1,19 @@
 :root {
     --bg-img: url('');
-    --bg: rgba(240, 240, 240, 0.6)
+    --bg: rgba(255, 255, 255, 0.5);
+    --widget-color: rgba(255, 255, 255, 0.65);
+    --bg-blur: 6px;
+    --widget-title: 1.8rem;
 }
 
-.bg {
-    background-color: var(--bg);
-}
 
 *{
     margin: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+    border: 2px transparent;
+    outline: 0;
+    border-radius: 15px;
 }
 
 body{
@@ -23,46 +26,45 @@ body{
     background-size: cover;
 }
 
+/* GENERAL CLASSES */
+.bg {
+    background-color: var(--bg);
+    backdrop-filter: blur(var(--bg-blur));
+}
+
+.hidden{
+    display: none;
+}
+
 /* HEADER */
 header{
     padding: 1rem 0 1rem;
     display: flex;
     justify-content: center;
 }
+
 .date-board{
     /* FIX STYLING */
-    border: 1px solid black;
     border-radius: 100px;
-    padding: .5rem 2rem;
+    padding: .75rem 4rem;
     display: flex;
     /* FIX DYNAMIC GAP */
     gap: 1rem; 
 }
 
-
-/* TITLE + WIDGETS */
-main{
-    width: 90%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+.time {
+    font-weight: bold;
 }
 
-.title {
-    /* DISABLE MARKING OF TITLE TEXT */
-    user-select: none;
+/* GENERAL WIDGET STYLING */
+.wtitle {
+    font-size: var(--widget-title);
+    font-weight: 100;
 }
-.title-box {
-    position: relative;
-}
-.title-input {
-    position: absolute;
-    inset: 0 0 0 0;
-}
-.hidden{
-    display: none;
+
+.witem {
+    background-color: var(--widget-color);
+    width: 100%;
 }
 
 .widgets{
@@ -74,8 +76,6 @@ main{
 }
 
 .widgets > * {
-    border: 1px solid black;
-    border-radius: 15px;
     padding: 1rem 0.5rem 1rem;
     display: flex;
     flex-direction: column;
@@ -83,6 +83,35 @@ main{
     justify-content: space-between;
 }
 
+
+/* TITLE */
+main{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.title {
+    user-select: none;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.title-box {
+    position: relative;
+}
+
+.title-input {
+    position: absolute;
+    
+    inset: 0 0 0 0;
+}
+
+
+/* LINKS */
 .add{
     width: 100%;
     position: relative;
@@ -99,11 +128,7 @@ main{
     width: 100%;
 }
 
-
-/* ADD REMOVE LOGO */
 .link {
-    border: 1px solid black;
-    border-radius: 10px;
     padding: 1rem 0.5rem;
     position: relative;
 }
@@ -116,11 +141,9 @@ main{
     cursor: pointer;
 }
 
+
 /* WEATHER */
 .weather-container{
-    width: 100%;
-    background-color: lightgray;
-    border-radius: 15px;
     display: flex;
 }
 
@@ -147,8 +170,46 @@ main{
 .temp-and-such > * {
     background-color: #fff;
     padding: .15rem .5rem;
-    border-radius: 5px;
 }
+
+
+/* CAT FACTS */
+.fact-container{
+    background-color: #fff;
+    width: 100%;
+    height: fit-content;
+    margin: 1rem auto auto;
+    padding: .5rem .5rem;
+}
+
+.cat-fact {
+    font-weight: bold;
+    font-size: 1.15rem;
+    text-align: center;
+    
+    &::before{
+      content: "“ ";
+      font-size: 3rem;
+      line-height: 0;
+      vertical-align: bottom;
+    }
+    &::after{
+        content: " ”";
+        font-size: 3rem;
+        line-height: 0;
+        vertical-align: bottom;
+    }
+}
+
+
+/* NOTES */
+.text-area{
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+    resize: none;
+}
+
 
 /* FOOTER */
 footer{
@@ -159,8 +220,6 @@ footer{
 
 .btn{
     padding: .5rem 2rem;
-    border-radius: 10px;
-    border: 1px solid black;
 }
 
 .buttons {
@@ -174,4 +233,7 @@ footer{
 
 .query-input {
     position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: auto auto 0 0 ;
 }

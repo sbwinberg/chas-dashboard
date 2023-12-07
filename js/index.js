@@ -132,7 +132,7 @@ linkInput.addEventListener('keydown', (e) => {
 
 function displayLink(url, name) {
     const tmp = `
-    <div class="link">
+    <div class="link witem">
         <a href='${url}' target='_blank'>${name}</a>
         <i class="close" data-id=${url}>X</i>
     </div>
@@ -154,7 +154,7 @@ linkList.addEventListener('click', (e) => {
 
 // NOTES
 // SAVES ON FOCUS OUT, UPDATING VIA KEYBOARD LOSES EVERYTHING WRITTEN
-const text_area = document.getElementById('text-area');
+const text_area = document.querySelector('.text-area');
 text_area.addEventListener('focusout', () => {
     const notes = text_area.value;
     localStorage.setItem('notes', notes);
@@ -197,7 +197,7 @@ function displayWeather(data){
             day = weekdays[currentDay.getDay()]
         }
         let tmp = `
-            <div class="weater-today weather-container">
+            <div class="weater-today weather-container witem">
                 <div class='image-container'> 
                     <img src=${short[obj].day.condition.icon} alt=${short[obj].day.condition.text} class="weather-image">
                 </div>
@@ -218,10 +218,10 @@ function displayWeather(data){
 
 // FUNCTION BACKGROUND IMAGE
 let data;
-async function getImage(url = `https://api.unsplash.com/photos/random?query=forest&count=10&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
+async function getImage(url = `https://api.unsplash.com/photos/random?query=wallpaper&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
     const response = await fetch(url);
     data = await response.json();
-    console.log(data)
+    // console.log(data)
     displayBackground(data)
 }
 getImage();
@@ -236,24 +236,68 @@ function displayBackground(data) {
 
 const bgBtn = document.querySelector('.new-background');
 bgBtn.addEventListener('click', () => {
-    displayBackground(data);
+    getImage();
 })
 
 
 // FUNCTION BG QUERY
+// UNBSPLASH RATE LIMIT 50 PICS/HOUR
 const queryBtn = document.querySelector('.query-btn');
 const queryInput = document.querySelector('.query-input')
 
 queryBtn.addEventListener('click', () => {
     queryInput.classList.remove('hidden');
+    queryInput.focus();
+})
+
+queryInput.addEventListener('keydown', (e) => {
+    if(e.keyCode === 13){
+        if(queryInput.value == ''){
+            queryInput.classList.add('hidden')
+        } else {
+            let query = queryInput.value;
+            // change count to 1 to not overload my api limit :(
+            let url = `https://api.unsplash.com/photos/random?query=${query}&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`
+            getImage(url);
+        
+            queryInput.value = '';
+            queryInput.classList.add('hidden');
+        }
+    }
 })
 
 
+// FUNCTION CAT FACTS API
+async function getCatFact() {
+    const response = await fetch('https://cat-fact.herokuapp.com/facts');
+    const data = await response.json();
+    console.log(data)
+    displayCatFact(data)
+}
+getCatFact();
+
+function displayCatFact(data) {
+    const factP = document.querySelector('.cat-fact');
+    const index = Math.floor(Math.random() * data.length);
+    console.log(index)
+    const fact = `${data[index].text}`
+    factP.innerText = fact;
+}
+
+
+// FUNCTION HOLIDAYS API
+// only 1000 requests available
+// async function getHoliday() {
+//     const response = await fetch('https://holidays.abstractapi.com/v1/?api_key=&country=SE&')
+//     const data = await response.json();
+//     console.log(data);
+// }
+// getHoliday();
+
 
 // NEWS API
-
 // async function getNews() {
 //     let api = "70537e11-7959-4ae7-aaf4-bc4ccbc3b924"
-//     const response = await fetch('http://eventregistry.org/api/v1/minuteStreamArticlesapiKEY=70537e11-7959-4ae7-aaf4-bc4ccbc3b924')
+//     const response = await fetch('http://eventregistry.org/api/v1/minuteStreamArticlesapiKEY=')
 //     console.log(response)
 // }
