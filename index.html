@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
 </head>
 <body>
     <header>
@@ -23,14 +25,17 @@
                 <h2 class="wtitle">Snabblänkar</h2>
                 <div class="links"></div>
                 <div class="add">
-                    <button class="add-link">Lägg till länk</button>
+                    <button class="add-link"><i class="material-symbols-outlined add-logo" style="font-size:1.25rem">add_circle</i>Lägg till länk</button>
                     <input type="text" class="link-input hidden" placeholder="Enter URL:">
                 </div>
             </div>
             <div class="weather bg">
                 <h2 class="wtitle">Dagens väder</h2>
                 <div class="all-weathers"></div>
-                <div class="location"></div>
+                <div class="location-query">
+                    <div class="location"></div>
+                    <input type="text" class="location-input hidden">
+                </div>
             </div>
             <div class="whatever bg">
                 <h2 class="wtitle">Cat Fact</h2>

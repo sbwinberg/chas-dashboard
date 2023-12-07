@@ -1,7 +1,7 @@
 :root {
     --bg-img: url('./img/default.jpg');
     --bg: rgba(255, 255, 255, 0.6);
-    --widget-color: rgba(255, 255, 255, 0.85);
+    --widget-color: rgba(255, 255, 255, 0.705);
     --bg-blur: 3px;
     --widget-title: 1.8rem;
 }
@@ -32,6 +32,7 @@ body{
     background-color: var(--bg);
     backdrop-filter: blur(var(--bg-blur));
 }
+
 .hidden{display: none}
 .hide {visibility: hidden}
 
@@ -62,6 +63,7 @@ header{
 .witem {
     background-color: var(--widget-color);
     width: 100%;
+    border-radius: 10px;
 }
 
 .widgets{
@@ -114,6 +116,18 @@ main{
 
 
 /* LINKS */
+
+.shortcuts{
+    justify-content: start;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.shortcuts::-webkit-scrollbar {
+    display: none;
+}
+
 .add{
     width: 100%;
     position: relative;
@@ -121,38 +135,63 @@ main{
     justify-content: center;
 }
 
+.add-link {
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    background-color: rgba(143, 143, 143, 0.596);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1rem;
+}
+
 .link-input{
     position: absolute;
     inset: 0;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 1rem;
 }
 
 .links{
     width: 100%;
-    margin-bottom: auto;
 }
 
 .link {
     padding: 1rem 0.5rem;
     position: relative;
+    margin-bottom: .5rem;
+}
+
+.link a{
+    text-decoration: none;
+    color: black;
+    font-size: 1rem;
 }
 
 .close {
     font-style: normal;
     font-size: .75rem;
     position: absolute;
-    inset: 2px 5px auto auto;
+    inset: 10% 4% auto auto;
     cursor: pointer;
 }
 
 
 /* WEATHER */
-.weather-container{display: flex}
 .day{font-weight: bold}
 
 .weather-image {width: 100%}
 .image-container {
     width: 4rem;
     aspect-ratio: 1/1;
+}
+
+.weather-container{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 }
 
 .all-weathers {
@@ -166,19 +205,43 @@ main{
 .weather-info{
     display: flex;
     flex-direction: column;
+    gap: .5em;
 }
 
 .temp-and-such{
     display: flex;
+    gap: .5rem;
     font-size: .9rem;
 }
 
 .temp-and-such > * {
-    background-color: var(--widget-color);
+    background-color: rgba(255, 255, 255, 0.411);
     padding: .15rem .5rem;
+    border-radius: 5px;
 }
 
+.location {
+    user-select: none;
+    font-weight: bold;
+}
 
+.location-query{
+    width: 100%;
+    height: 2rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.location-input{
+    position: absolute;
+    inset: 0 0 0 0;
+    font-size: 1.25rem;
+    text-align: center;
+    background-color: var(--widget-color);
+    padding: .5rem;
+}
 
 
 /* CAT FACTS */
