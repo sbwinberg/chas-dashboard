@@ -74,7 +74,6 @@ titleInput.addEventListener('keydown', (e) => {
     if(e.keyCode === 13){
         updateTitle();
     }
-
 })
 
 titleInput.addEventListener('focusout', () => {
@@ -164,6 +163,7 @@ linkList.addEventListener('click', (e) => {
     }
 });
 
+
 // NOTES
 // SAVES ON FOCUS OUT, UPDATING VIA KEYBOARD LOSES EVERYTHING WRITTEN
 const text_area = document.querySelector('.text-area');
@@ -184,14 +184,13 @@ navigator.geolocation.getCurrentPosition((position) => {
 });
 
 
-const weather_api = '25a21f44ab1f402584c160402232711'
-
 async function getWeather(lat, lon, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
     console.log(data)
     displayWeather(data)
 }
+
 
 function displayWeather(data){
     const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
@@ -231,7 +230,6 @@ function displayWeather(data){
 }
 
 
-
 // FUNCTION BACKGROUND IMAGE
 let data;
 async function getImage(url = `https://api.unsplash.com/photos/random?query=wallpaper&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
@@ -240,7 +238,7 @@ async function getImage(url = `https://api.unsplash.com/photos/random?query=wall
     // console.log(data)
     displayBackground(data)
 }
-getImage();
+
 
 function displayBackground(data) {
     const w = window.innerWidth;
@@ -249,6 +247,7 @@ function displayBackground(data) {
     const bg = `url('${data[index].urls.raw}&h=${h}&w=${w}&dpr=2')`;
     document.body.style.setProperty('--bg-img', bg);
 }
+
 
 const bgBtn = document.querySelector('.new-background');
 bgBtn.addEventListener('click', () => {
@@ -261,10 +260,12 @@ bgBtn.addEventListener('click', () => {
 const queryBtn = document.querySelector('.query-btn');
 const queryInput = document.querySelector('.query-input')
 
+
 queryBtn.addEventListener('click', () => {
     queryInput.classList.remove('hidden');
     queryInput.focus();
 })
+
 
 queryInput.addEventListener('keydown', (e) => {
     if(e.keyCode === 13){
@@ -292,6 +293,7 @@ async function getCatFact() {
 }
 getCatFact();
 
+
 function displayCatFact(data) {
     const factP = document.querySelector('.cat-fact');
     const index = Math.floor(Math.random() * data.length);
@@ -299,21 +301,3 @@ function displayCatFact(data) {
     const fact = `${data[index].text}`
     factP.innerText = fact;
 }
-
-
-// FUNCTION HOLIDAYS API
-// only 1000 requests available
-// async function getHoliday() {
-//     const response = await fetch('https://holidays.abstractapi.com/v1/?api_key=&country=SE&')
-//     const data = await response.json();
-//     console.log(data);
-// }
-// getHoliday();
-
-
-// NEWS API
-// async function getNews() {
-//     let api = "70537e11-7959-4ae7-aaf4-bc4ccbc3b924"
-//     const response = await fetch('http://eventregistry.org/api/v1/minuteStreamArticlesapiKEY=')
-//     console.log(response)
-// }
