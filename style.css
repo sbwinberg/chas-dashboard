@@ -149,12 +149,13 @@ main{
     font-size: 1rem;
 }
 
-.link-input{
+.input{
     position: absolute;
     inset: 0;
     text-align: center;
     border-radius: 10px;
     font-size: 1rem;
+    background-color: var(--widget-color);
 }
 
 .links{

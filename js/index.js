@@ -90,24 +90,21 @@ let links = [];
 
 addLinkBtn.addEventListener('click', () => {
     linkInput.classList.remove('hidden');
+    addLinkBtn.classList.add('hide')
     linkInput.focus();
 })
 
 // FIX MESSY ASS IF STATEMENTS
-let url;
 linkInput.addEventListener('keydown', (e) => {
     if(e.keyCode != 13) return
+    url = linkInput.value.toLowerCase();
     
-    if(linkInput.placeholder != 'Enter a name:'){
-        url = linkInput.value.toLowerCase();
-    }
-
-    if(url == '' && linkInput.placeholder != 'Enter a name:'){
+    if(url == ''){
         linkInput.classList.add('hidden');
         return
     }
     
-    if(regexURL.test(url) && linkInput.placeholder != 'Enter a name:'){
+    if(regexURL.test(url)){
         linkInput.value = '';
         linkInput.placeholder = 'Enter a name:'
         
@@ -308,7 +305,6 @@ queryInput.addEventListener('keydown', (e) => {
 async function getCatFact() {
     const response = await fetch('https://cat-fact.herokuapp.com/facts');
     const data = await response.json();
-    // console.log(data)
     displayCatFact(data)
 }
 getCatFact();
