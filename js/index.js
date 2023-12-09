@@ -1,6 +1,5 @@
 // TODO
-//     Extra utmaning: Hämta länkens favicon och visa som bild i dashboarden.
-//     Extra utmaning: Gör så att användaren kan anpassa orten som visas
+
     
 // ADD FUNCTION TO LOAD ALL ELEMENTS FROM LOCAL STORAGE
 // SET LINKS, NOTES, TITLE ETC
@@ -144,8 +143,8 @@ function displayLink(url, name) {
     // WORKS WITH GENERIC LINKS (NOTHING AFTER .COM)
     // <img src="${url}/favicon.ico" alt="${name} icon" class="icon">
 
-    url = new URL(url);
-    const domainName = url.hostname;
+    const getDomain = new URL(url);
+    const domainName = getDomain.hostname;
 
     const tmp = `
     <div class="link witem">
@@ -167,6 +166,7 @@ linkList.addEventListener('click', (e) => {
         links = links.filter((obj) => {
             return obj.link != e.target.getAttribute('data-id')
         })
+        console.log(links);
         links = JSON.stringify(links);
         localStorage.setItem('links', links)
         e.target.parentElement.remove();
@@ -249,7 +249,6 @@ let data;
 async function getImage(url = `https://api.unsplash.com/photos/random?query=wallpaper&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
     const response = await fetch(url);
     data = await response.json();
-    // console.log(data)
     displayBackground(data)
 }
 
@@ -277,7 +276,14 @@ const queryInput = document.querySelector('.query-input')
 
 queryBtn.addEventListener('click', () => {
     queryInput.classList.remove('hidden');
+    queryBtn.classList.add('hide');
     queryInput.focus();
+})
+
+queryInput.addEventListener('focusout', () => {
+    queryInput.value = '';
+    queryInput.classList.add('hidden');
+    queryBtn.classList.remove('hide');
 })
 
 
