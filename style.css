@@ -162,6 +162,9 @@ main{
     padding: 1rem 0.5rem;
     position: relative;
     margin-bottom: .5rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 }
 
 .link a{
@@ -176,6 +179,10 @@ main{
     position: absolute;
     inset: 10% 4% auto auto;
     cursor: pointer;
+}
+
+.icon {
+    width: 2rem;
 }
 
 

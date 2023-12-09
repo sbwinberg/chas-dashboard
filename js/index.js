@@ -1,18 +1,7 @@
-// import {} from 'dotenv/config'
-
 // TODO
 //     Extra utmaning: Hämta länkens favicon och visa som bild i dashboarden.
-    
-// 4. Här ska vädret i närtid visas. Denna behöver inte se ut exakt som i skissen men det ska vara data som hämtas från något öppet API. För att avgöra vilken stad vädret ska visas för ska browserns geolocation-api användas.
-    
 //     Extra utmaning: Gör så att användaren kan anpassa orten som visas
     
-// 5. Denna del får du fritt bestämma vad den ska innehålla. Det ska dock vara data från ett externt API och exempelvis kan det vara senaste nyheterna eller aktiekurser.
-// 6. I den här delen ska användaren kunna skriva snabba anteckningar. Tänk en stor textarea bara där det som skrivs sparas hela tiden. Det ska inte finnas flera olika anteckningar utan bara just en yta.
-// 7. När användaren klickar på denna knapp ska en randomiserad bild från Unsplash API hämtas och läggas in som bakgrund på dashboarden.
-    
-//     Extra utmaning: Låt användaren fylla i ett sökord som används för att hitta en randomiserad bild så att det blir inom ett tema som användaren önskar.
-
 // ADD FUNCTION TO LOAD ALL ELEMENTS FROM LOCAL STORAGE
 // SET LINKS, NOTES, TITLE ETC
 window.addEventListener('load', addFromStorage);
@@ -22,7 +11,7 @@ function addFromStorage() {
     if(localStorage.getItem('title')){
         title.innerText = localStorage.getItem('title');
     }
-    if(localStorage.getItem('links') && localStorage.getItem('links') != '[object Object]'){
+    if(localStorage.getItem('links')){
         links = JSON.parse(localStorage.getItem('links'));
         links.forEach(obj => {
             displayLink(obj.link, obj.name)
@@ -68,7 +57,6 @@ title.addEventListener('dblclick', () => {
     title.classList.add('hide')
     titleInput.focus();
 })
-
 
 titleInput.addEventListener('keydown', (e) => {
     if(e.keyCode === 13){
@@ -124,7 +112,9 @@ linkInput.addEventListener('keydown', (e) => {
         linkInput.value = '';
         linkInput.placeholder = 'Enter a name:'
         
-    } else if(linkInput.placeholder == 'Enter a name:'){
+    }else if(linkInput.placeholder == 'Enter a name:'){
+        links = JSON.parse(localStorage.getItem('links'));
+
         let name = linkInput.value;
         let link = {
             'link' : `${url}`,
@@ -140,10 +130,28 @@ linkInput.addEventListener('keydown', (e) => {
     }
 })
 
+linkInput.addEventListener('focusout', () => {
+    linkInput.value = ''
+    linkInput.placeholder = 'Enter URL:'
+    linkInput.classList.add('hidden')
+})
+
 
 function displayLink(url, name) {
+    // WORKS BUT WITH LOW RESOLUTION
+    // <img src="http://www.google.com/s2/favicons?domain_url=${url}" alt="${name} icon" class="icon">
+
+    // WORKS WITH GENERIC LINKS (NOTHING AFTER .COM)
+    // <img src="${url}/favicon.ico" alt="${name} icon" class="icon">
+
+    url = new URL(url);
+    const domainName = url.hostname;
+
     const tmp = `
     <div class="link witem">
+        <div class="icon-container">
+        <img src="https://icon.horse/icon/${domainName}" class="icon">
+        </div>
         <a href='${url}' target='_blank'>${name}</a>
         <i class="close" data-id=${url}>X</i>
     </div>
@@ -151,13 +159,15 @@ function displayLink(url, name) {
     linkList.innerHTML += tmp;
 }
 
-
 // FUNCTION CLOSE BUTTON
+// NOT AN OPTION TO HAVE TWO IDENTICAL LINKS
 linkList.addEventListener('click', (e) => {
     if(e.target.classList.contains('close')){
+        links = JSON.parse(localStorage.getItem('links'));
         links = links.filter((obj) => {
             return obj.link != e.target.getAttribute('data-id')
         })
+        links = JSON.stringify(links);
         localStorage.setItem('links', links)
         e.target.parentElement.remove();
     }
@@ -184,29 +194,33 @@ navigator.geolocation.getCurrentPosition((position) => {
 });
 
 
-async function getWeather(lat, lon, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
+async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
-    console.log(data)
     displayWeather(data)
 }
 
+const city = document.querySelector('.location-input');
+city.addEventListener('keydown', (e) => {
+    if(e.keyCode != 13) return
+    const newPlace = city.value;
+    getWeather(0, 0, `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${newPlace}&days=3&lang=sv`)
+})
 
 function displayWeather(data){
     const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
     const container = document.querySelector('.all-weathers')
-    const city = document.querySelector('.location');
-    city.innerText = data.location.name;
+    container.innerHTML = ''
+    city.value = data.location.name;
     let short = data.forecast.forecastday;
     
     for(let obj in data.forecast.forecastday){
         const fullWeather = short[obj].day.condition.text.split(' ');
         let shortWeather = fullWeather[fullWeather.length -1]
         shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1)
-
         let day;
 
-        if(obj == 0){ day = 'Idag';}
+        if(obj == 0){ day = 'Idag'}
         else if (obj == 1){ day = 'Imorgon'}
         if (obj == 2){
             const currentDay = new Date(short[obj].date);
@@ -288,7 +302,7 @@ queryInput.addEventListener('keydown', (e) => {
 async function getCatFact() {
     const response = await fetch('https://cat-fact.herokuapp.com/facts');
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
     displayCatFact(data)
 }
 getCatFact();
@@ -297,7 +311,6 @@ getCatFact();
 function displayCatFact(data) {
     const factP = document.querySelector('.cat-fact');
     const index = Math.floor(Math.random() * data.length);
-    console.log(index)
     const fact = `${data[index].text}`
     factP.innerText = fact;
 }
