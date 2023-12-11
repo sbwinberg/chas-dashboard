@@ -183,6 +183,8 @@ main{
 
 .icon {
     width: 2rem;
+    display: flex;
+    align-items: center;
 }
 
 
