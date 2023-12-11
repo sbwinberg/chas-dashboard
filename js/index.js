@@ -1,9 +1,3 @@
-// TODO
-// ÄNDRA VARJE USER INPUT SOM UPPDATERAR INNERHTML, https://www.youtube.com/watch?v=ns1LX6mEvyM
-
-
-
-
 // FUNCTION LOAD FROM LOCAL STORAGE
 ///////////////////////////////////
 window.addEventListener('load', addFromStorage);
@@ -24,6 +18,7 @@ function addFromStorage() {
     setDate();
     setTime();
     setInterval(setTime, 1000);
+    setInterval(setDate, 60000)
 }
 
 // FUNCTION SET TIME AND DATE
@@ -129,7 +124,6 @@ nameInput.addEventListener('keydown', (e) => {
         nameInput.classList.add('hidden');
     } else {
         links = JSON.parse(localStorage.getItem('links'));
-    
         let link = {
             'link' : `${url}`,
             'name' : `${name}`
@@ -161,15 +155,8 @@ nameInput.addEventListener('focusout', () => {
 
 // GET FAVICON AND ADD HTML TEMPLATE FOR LINKS
 function displayLink(url, name) {
-    // WORKS BUT WITH LOW RESOLUTION
-    // <img src="http://www.google.com/s2/favicons?domain_url=${url}" alt="${name} icon" class="icon">
-
-    // WORKS WITH GENERIC LINKS (NOTHING AFTER .COM)
-    // <img src="${url}/favicon.ico" alt="${name} icon" class="icon">
-
     const getDomain = new URL(url);
     const domainName = getDomain.hostname;
-
     const tmp = `
     <div class="link witem relative">
         <div class="icon-container">
@@ -225,7 +212,8 @@ navigator.geolocation.getCurrentPosition((position) => {
 async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
-    displayWeather(data)
+    console.log(data);
+    displayWeather(data); 
 }
 
 // GET WEATHER WITH NEW LOCATION ON ENTER
@@ -241,7 +229,7 @@ city.addEventListener('keydown', (e) => {
 function displayWeather(data){
     const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
     const container = document.querySelector('.all-weathers')
-    container.innerHTML = ''
+    container.innerHTML = '';
     city.value = data.location.name;
     let short = data.forecast.forecastday;
     
@@ -250,8 +238,15 @@ function displayWeather(data){
         let shortWeather = fullWeather[fullWeather.length -1];
         shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1);
         let day;
+        let temp = short[obj].day.avgtemp_c;
 
-        if(obj == 0){ day = 'Idag'}
+        if(obj == 0){ 
+            const date = new Date()
+            const now = date.getHours() - 1;
+            console.log(now)
+            day = 'Idag';
+            temp = short[obj].hour[now].temp_c;
+        }
         else if (obj == 1){ day = 'Imorgon'}
         else {
             const currentDay = new Date(short[obj].date);
@@ -265,7 +260,7 @@ function displayWeather(data){
                 <div class="weather-info">
                     <div class="day">${day}</div>
                     <div class="temp-and-such">
-                        <div class="temp">${short[obj].day.avgtemp_c}&deg;C</div>
+                        <div class="temp">${temp}&deg;C</div>
                         <div class="such">${shortWeather}</div>
                     </div>
                 </div>
@@ -279,9 +274,13 @@ function displayWeather(data){
 // GET DATA FROM UNSPLASH API
 async function getImage(url = `https://api.unsplash.com/photos/random?query=wallpaper&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
     const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);
-    displayBackground(data)
+    if(response.ok){
+        const data = await response.json();
+        displayBackground(data)
+    } else {
+        document.body.style.setProperty('--bg-img', "url('./img/default.jpg')");
+        alert('Something went wrong, so I got the standard background for you.');
+    }
 }
 
 // CUT IMAGE TO CORRECT DIMENSIONS BASED ON WINDOW SIZE AND UPDATE CSS ROOT VARIABLE
