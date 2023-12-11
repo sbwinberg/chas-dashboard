@@ -24,6 +24,7 @@
 * Inga error i HTML validator
 * Favicons från url!!
 * Visar dag och månad(på svenska) istället för en siffra 😲
+* HTML title attribute som ger instruktioner för användning på hover
 
 ## Att göra
 * Håller på att försöka göra om koden så att användaren inte kan använda input för att ändra innerHTML
