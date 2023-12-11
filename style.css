@@ -1,18 +1,19 @@
 :root {
     --bg-img: url('./img/default.jpg');
-    --bg: rgba(255, 255, 255, 0.6);
+    --container-bg: rgba(255, 255, 255, 0.6);
     --widget-color: rgba(255, 255, 255, 0.705);
     --bg-blur: 3px;
-    --widget-title: 1.8rem;
+    font-size: 16px;
 }
 
 *{
     margin: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
+    font-size: 16px;
     border: 2px transparent;
     outline: 0;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 body{
@@ -29,12 +30,22 @@ body{
 
 /* GENERAL CLASSES */
 .bg {
-    background-color: var(--bg);
+    background-color: var(--container-bg);
     backdrop-filter: blur(var(--bg-blur));
 }
 
-.hidden{display: none}
+
+/* EXTRA HIDE CLASS TO STILL HAVE POSITION RELATIVE */
+.hidden{display: none} 
 .hide {visibility: hidden}
+.relative{position: relative}
+
+.input{
+    position: absolute;
+    inset: 0;
+    text-align: center;
+    background-color: var(--widget-color);
+}
 
 
 /* HEADER */
@@ -53,9 +64,10 @@ header{
 
 .time {font-weight: 900}
 
+
 /* GENERAL WIDGET STYLING */
 .wtitle {
-    font-size: var(--widget-title);
+    font-size: 1.8rem;
     font-weight: 300;
     margin-bottom: .5rem;
 }
@@ -63,7 +75,6 @@ header{
 .witem {
     background-color: var(--widget-color);
     width: 100%;
-    border-radius: 10px;
     font-weight: 500;
 }
 
@@ -73,6 +84,7 @@ header{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
+    border-radius: 15px;
 }
 
 .widgets > * {
@@ -102,24 +114,18 @@ main{
 }
 
 .title-box {
-    position: relative;
     min-width: 500px;
     text-align: center;
 }
 
 .title-input {
-    position: absolute;
-    background-color: var(--widget-color);
     color: rgba(255, 255, 255, 0.9);
-    text-align: center;
     font-size: 3.5rem;
     font-weight: 700;
-    inset: 0 0 0 0;
 }
 
 
 /* LINKS */
-
 .shortcuts{
     justify-content: start;
     overflow-y: scroll;
@@ -133,29 +139,17 @@ main{
 
 .add{
     width: 100%;
-    position: relative;
     display: flex;
     justify-content: center;
 }
 
 .add-link {
     padding: .5rem 1rem;
-    border-radius: 10px;
     background-color: rgba(143, 143, 143, 0.596);
     color: white;
     display: flex;
     align-items: center;
     gap: .5rem;
-    font-size: 1rem;
-}
-
-.input{
-    position: absolute;
-    inset: 0;
-    text-align: center;
-    border-radius: 10px;
-    font-size: 1rem;
-    background-color: var(--widget-color);
 }
 
 .links{
@@ -164,7 +158,6 @@ main{
 
 .link {
     padding: 1rem 0.5rem;
-    position: relative;
     margin-bottom: .5rem;
     display: flex;
     align-items: center;
@@ -178,10 +171,15 @@ main{
 
 .close {
     font-style: normal;
-    font-size: .75rem;
+    font-size: 10px;
     position: absolute;
-    inset: 10% 4% auto auto;
+    inset: 5px 5px auto auto;
     cursor: pointer;
+}
+
+.material-symbols-outlined.md-15 {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.651);
 }
 
 .icon {
@@ -196,6 +194,8 @@ main{
 .image-container {
     width: 4rem;
     aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
 }
 
 .weather-container{
@@ -204,30 +204,28 @@ main{
     gap: .5rem;
 }
 
-.all-weathers {
-    margin-bottom: auto;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: .75rem;
-}
-
+.all-weathers,
 .weather-info{
     display: flex;
     flex-direction: column;
-    gap: .5em;
+    gap: .5rem;
+}
+
+.all-weathers {
+    margin-bottom: auto;
+    width: 100%;
 }
 
 .temp-and-such{
     display: flex;
     gap: .5rem;
-    font-size: .9rem;
 }
 
 .temp-and-such > * {
     background-color: rgba(255, 255, 255, 0.411);
     padding: .15rem .5rem;
     border-radius: 5px;
+    font-size: .9rem;
 }
 
 .location {
@@ -238,21 +236,15 @@ main{
 .location-query{
     width: 100%;
     height: 2rem;
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .location-input{
-    position: absolute;
-    inset: 0 0 0 0;
     font-size: 1.25rem;
     font-weight: 500;
-    text-align: center;
-    background-color: var(--widget-color);
     padding: .5rem;
-    border-radius: 10px;
 }
 
 
@@ -291,7 +283,6 @@ main{
     width: 100%;
     padding: 1rem;
     resize: none;
-    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -305,9 +296,7 @@ footer{
 
 .btn{
     padding: .5rem 1rem;
-    border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.788);
-    font-size: 1rem;
     font-weight: 500;
     color: rgba(0, 0, 0, 0.808);
     display: flex;
@@ -319,19 +308,4 @@ footer{
 .buttons {
     display: flex;
     gap: 1rem;
-}
-
-.query{
-    position: relative;
-}
-
-.query-input {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    inset: auto auto 0 0 ;
-    background-color: rgba(255, 255, 255, 0.788);
-    border-radius: 10px;
-    text-align: center;
-    font-size: 1rem;
 }

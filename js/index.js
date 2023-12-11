@@ -1,3 +1,9 @@
+// TODO
+// ÄNDRA VARJE USER INPUT SOM UPPDATERAR INNERHTML, https://www.youtube.com/watch?v=ns1LX6mEvyM
+
+
+
+
 // FUNCTION LOAD FROM LOCAL STORAGE
 ///////////////////////////////////
 window.addEventListener('load', addFromStorage);
@@ -105,11 +111,11 @@ linkInput.addEventListener('keydown', (e) => {
     } else if(!regexURL.test(url)){
         linkInput.value = '';
         alert('Invalid link format, try again!');
-        addLinkBtn.classList.remove('hide')
+        addLinkBtn.classList.remove('hide');
     } else {
         linkInput.value = '';
-        linkInput.classList.add('hidden')
-        nameInput.classList.remove('hidden')
+        linkInput.classList.add('hidden');
+        nameInput.classList.remove('hidden');
         nameInput.focus();
     }
 })
@@ -165,12 +171,11 @@ function displayLink(url, name) {
     const domainName = getDomain.hostname;
 
     const tmp = `
-    <div class="link witem">
+    <div class="link witem relative">
         <div class="icon-container">
-        <img src="https://icon.horse/icon/${domainName}" class="icon">
-        </div>
+        <img src="https://icon.horse/icon/${domainName}" class="icon"></div>
         <a href='${url}' target='_blank'>${name}</a>
-        <i class="close" data-id=${url}>X</i>
+        <i class="close material-symbols-outlined md-15" data-id=${url}>do_not_disturb_on</i>
     </div>
     `;
     linkList.innerHTML += tmp;
@@ -225,10 +230,11 @@ async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1
 
 // GET WEATHER WITH NEW LOCATION ON ENTER
 const city = document.querySelector('.location-input');
+
 city.addEventListener('keydown', (e) => {
     if(e.keyCode != 13) return
     const newPlace = city.value;
-    getWeather(0, 0, `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${newPlace}&days=3&lang=sv`)
+    getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${newPlace}&days=3&lang=sv`)
 })
 
 // DISPLAY WEATHER FROM WEATHER API
@@ -241,13 +247,13 @@ function displayWeather(data){
     
     for(let obj in data.forecast.forecastday){
         const fullWeather = short[obj].day.condition.text.split(' ');
-        let shortWeather = fullWeather[fullWeather.length -1]
-        shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1)
+        let shortWeather = fullWeather[fullWeather.length -1];
+        shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1);
         let day;
 
         if(obj == 0){ day = 'Idag'}
         else if (obj == 1){ day = 'Imorgon'}
-        if (obj == 2){
+        else {
             const currentDay = new Date(short[obj].date);
             day = weekdays[currentDay.getDay()]
         }

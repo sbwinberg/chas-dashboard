@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 </head>
 <body>
     <header>
@@ -18,15 +18,15 @@
         </div>
     </header>
     <main>
-        <div class="title-box">
-            <h1 class="title">John Doe's Dashboard</h1>
-            <input type="text" class="title-input hidden">
+        <div class="title-box relative">
+            <h1 class="title">John Doe Dashboard</h1>
+            <input type="text" class="title-input input hidden">
         </div>
         <div class="widgets">
             <div class="shortcuts bg">
                 <h2 class="wtitle">Snabblänkar</h2>
                 <div class="links"></div>
-                <div class="add">
+                <div class="add relative">
                     <button class="add-link"><i class="material-symbols-outlined add-logo" style="font-size:1.25rem">add_circle</i>Lägg till länk</button>
                     <input type="text" class="link-input input hidden" placeholder="Enter URL:">
                     <input type="text" class="name-input input hidden" placeholder="Enter a name:">
@@ -35,8 +35,8 @@
             <div class="weather bg">
                 <h2 class="wtitle">Dagens väder</h2>
                 <div class="all-weathers"></div>
-                <div class="location-query">
-                    <input type="text" class="location-input" placeholder="Choose a city..">
+                <div class="location-query relative">
+                    <input type="text" class="location-input input" placeholder="Choose a city..">
                 </div>
             </div>
             <div class="whatever bg">
@@ -57,9 +57,9 @@
     <footer>
         <div class="buttons">
             <button class="new-background btn"><i class="material-symbols-outlined">Refresh</i>Slumpa ny bakgrund</button>
-            <div class="query">
+            <div class="query relative">
                 <button class="query-btn btn"><i class="material-symbols-outlined">Search</i>Eller välj själv..</button>
-                <input type="text" class="query-input hidden">
+                <input type="text" class="query-input input hidden">
             </div>
         </div>
     </footer>
