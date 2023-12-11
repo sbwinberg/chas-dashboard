@@ -34,7 +34,6 @@ body{
     backdrop-filter: blur(var(--bg-blur));
 }
 
-
 /* EXTRA HIDE CLASS TO STILL HAVE POSITION RELATIVE */
 .hidden{display: none} 
 .hide {visibility: hidden}
@@ -309,3 +308,4 @@ footer{
     display: flex;
     gap: 1rem;
 }
+
