@@ -2,6 +2,8 @@
 ///////////////////////////////////
 window.addEventListener('load', addFromStorage);
 
+// SET TIME AND DATE THEN KEEP THEM UPDATED
+// IF ANY DISPLAY ITEMS IN LOCAL STORAGE
 function addFromStorage() {
     if(localStorage.getItem('title')){
         title.innerText = localStorage.getItem('title');
@@ -25,14 +27,14 @@ function addFromStorage() {
 /////////////////////////////
 // FUNCTION SET TIME AND DATE
 /////////////////////////////
-const timeArea = document.querySelector('.time');
-const dateArea = document.querySelector('.date');
+const timeContainer = document.querySelector('.time');
+const dateContainer = document.querySelector('.date');
 
 // GET CURRENT TIME FROM DATE OBJECT
 function setTime() {
     const timeNow = new Date();
     const timeString = timeNow.toLocaleTimeString();
-    timeArea.innerText = timeString;
+    timeContainer.innerText = timeString;
 }
 
 // GET CURRENT DATE FROM DATE OBJECT
@@ -44,7 +46,7 @@ function setDate() {
     const monthIndex = dateNow.getMonth();
     const month = months[monthIndex]
     const year = dateNow.getFullYear();
-    dateArea.innerText = `${day} ${month} ${year}`;
+    dateContainer.innerText = `${day} ${month} ${year}`;
 }
 
 ////////////////////////
@@ -87,8 +89,8 @@ titleInput.addEventListener('focusout', () => {
 /////////////////////
 // FUNCTION ADD LINKS
 /////////////////////
-const linkList = document.querySelector('.links');
-const addLinkBtn = document.querySelector('.add-link');
+const linkContainer = document.querySelector('.link-container');
+const addLinkBtn = document.querySelector('.add-btn');
 const linkInput = document.querySelector('.link-input');
 const nameInput = document.querySelector('.name-input')
 const regexURL = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
@@ -107,7 +109,7 @@ function displayLink(url, name) {
         <i class="close material-symbols-outlined md-15" data-id=${url}>do_not_disturb_on</i>
     </div>
     `;
-    linkList.innerHTML += tmp;
+    linkContainer.innerHTML += tmp;
 }
 
 // DISPLAY LINK INPUT ON DOUBLE CLICK
@@ -182,7 +184,7 @@ nameInput.addEventListener('focusout', () => {
 
 // REMOVE PARENT ELEMENT OF CLICKED CLOSE ICON
 // FILTER OUT FROM LOCAL STORAGE
-linkList.addEventListener('click', (e) => {
+linkContainer.addEventListener('click', (e) => {
     if(e.target.classList.contains('close')){
         links = JSON.parse(localStorage.getItem('links'));
         links = links.filter((obj) => {
@@ -200,10 +202,10 @@ linkList.addEventListener('click', (e) => {
 /////////////////
 
 // SAVES NOTES ON FOCUS OUT AND KEYPRESS
-const text_area = document.querySelector('.text-area');
+const textArea = document.querySelector('.text-area');
 ['keydown', 'focusout'].forEach(evt => {
-    text_area.addEventListener(evt, () => {
-        const notes = text_area.value;
+    textArea.addEventListener(evt, () => {
+        const notes = textArea.value;
         localStorage.setItem('notes', notes);
     })
 })
@@ -228,8 +230,8 @@ async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1
 }
 
 // GET NEW LOCATION ON ENTER AND FETCH WITH QUERY
-const city = document.querySelector('.location-input');
-city.addEventListener('keydown', (e) => {
+const locationInput = document.querySelector('.location-input');
+locationInput.addEventListener('keydown', (e) => {
     if(e.keyCode != 13) return
     getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${city.value}&days=3&lang=sv`)
 })
@@ -239,10 +241,10 @@ city.addEventListener('keydown', (e) => {
 // CURRENT VALUE FOR TODAY AND AVERAGE VALUES FOR FORECAST
 function displayWeather(data){
     const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'];
-    const container = document.querySelector('.all-weathers');
+    const weatherContainer = document.querySelector('.weather-container');
     let dayNow;
-    container.innerHTML = '';
-    city.value = data.location.name;
+    weatherContainer.innerHTML = '';
+    locationInput.value = data.location.name;
     
     for(let obj in data.forecast.forecastday){
         const short = data.forecast.forecastday[obj];
@@ -265,7 +267,7 @@ function displayWeather(data){
             dayNow = weekdays[currentDay.getDay()];
         }
         let tmp = 
-        `<div class="weater-today weather-container witem">
+        `<div class="weather-item witem">
                 <div class='image-container'> 
                     <img src=${icon} alt=${condition} class="weather-image">
                 </div>
@@ -277,7 +279,7 @@ function displayWeather(data){
                     </div>
                 </div>
             </div>`;
-        container.innerHTML += tmp;
+        weatherContainer.innerHTML += tmp;
     }
 }
 
@@ -378,8 +380,8 @@ async function getCatFact() {
 
 // DISPLAY RANDOM ONE OF AVAILABLE CAT FACTS
 function displayCatFact(data) {
-    const factP = document.querySelector('.cat-fact');
+    const catFact = document.querySelector('.cat-fact');
     const index = Math.floor(Math.random() * data.length);
     const fact = `${data[index].text}`
-    factP.innerText = fact;
+    catFact.innerText = fact;
 }

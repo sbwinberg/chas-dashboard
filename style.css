@@ -34,7 +34,7 @@ body{
     backdrop-filter: blur(var(--bg-blur));
 }
 
-/* EXTRA HIDE CLASS TO STILL HAVE POSITION RELATIVE */
+/* HIDE CLASS FOR ELEMENTS WITH POSITION RELATIVE AND HIDDEN FOR EVERYTHING ELSE*/
 .hidden{display: none} 
 .hide {visibility: hidden}
 .relative{position: relative}
@@ -112,7 +112,7 @@ main{
     cursor: pointer;
 }
 
-.title-box {
+.title-container {
     min-width: 500px;
     text-align: center;
 }
@@ -136,13 +136,13 @@ main{
     display: none;
 }
 
-.add{
+.add-container{
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.add-link {
+.add-btn {
     padding: .5rem 1rem;
     background-color: rgba(143, 143, 143, 0.596);
     color: white;
@@ -151,7 +151,7 @@ main{
     gap: .5rem;
 }
 
-.links{
+.link-container{
     width: 100%;
 }
 
@@ -190,8 +190,8 @@ main{
 
 /* WEATHER */
 .day{font-weight: bold}
-
 .weather-image {width: 100%}
+
 .image-container {
     width: 4rem;
     aspect-ratio: 1/1;
@@ -199,20 +199,20 @@ main{
     align-items: center;
 }
 
-.weather-container{
+.weather-item{
     display: flex;
     align-items: center;
     gap: .5rem;
 }
 
-.all-weathers,
+.weather-container,
 .weather-info{
     display: flex;
     flex-direction: column;
     gap: .5rem;
 }
 
-.all-weathers {
+.weather-container {
     margin-bottom: auto;
     width: 100%;
 }
@@ -229,12 +229,7 @@ main{
     font-size: .9rem;
 }
 
-.location {
-    user-select: none;
-    font-weight: bold;
-}
-
-.location-query{
+.location-container{
     width: 100%;
     height: 2rem;
     display: flex;
@@ -284,7 +279,7 @@ main{
     width: 100%;
     padding: 1rem;
     resize: none;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 
