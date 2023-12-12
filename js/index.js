@@ -22,31 +22,50 @@ function addFromStorage() {
     getCatFact();
 }
 
+/////////////////////////////
 // FUNCTION SET TIME AND DATE
 /////////////////////////////
-const timeArea = document.querySelector('.time')
-const dateArea = document.querySelector('.date')
+const timeArea = document.querySelector('.time');
+const dateArea = document.querySelector('.date');
 
+// GET CURRENT TIME FROM DATE OBJECT
 function setTime() {
     const timeNow = new Date();
     const timeString = timeNow.toLocaleTimeString();
     timeArea.innerText = timeString;
 }
 
+// GET CURRENT DATE FROM DATE OBJECT
+// GET MONTH NAME FROM ARRAY(TRIED WITH .LOCALEDATESTRING)
 function setDate() {
-    const months = ['December','Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November']
     const dateNow = new Date();
     const day = dateNow.getDate();
+    const months = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December']
     const monthIndex = dateNow.getMonth();
     const month = months[monthIndex]
     const year = dateNow.getFullYear();
     dateArea.innerText = `${day} ${month} ${year}`;
 }
 
+////////////////////////
 // FUNCTION CHANGE TITLE
-/////////////////////////////////////////
+////////////////////////
 const title = document.querySelector('.title');
 const titleInput = document.querySelector('.title-input')
+
+// GET TITLE FROM INPUT, ADD TO LOCAL STORAGE AND UPDATE HTML
+// FALLBACK TITLE IN CASE OF EMPTY INPUT
+function updateTitle(){
+    const newTitle = titleInput.value;
+    title.innerText = newTitle;
+    localStorage.setItem('title', newTitle)
+    titleInput.classList.add('hidden');
+    title.classList.remove('hide')
+
+    if(titleInput.value == ''){
+        title.innerText = "John Doe's Dashboard"
+    }
+}
 
 // HIDE TITLE AND SHOW INPUT ON DOUBLE CLICK
 title.addEventListener('dblclick', () => {
@@ -61,24 +80,11 @@ titleInput.addEventListener('keydown', (e) => {
         updateTitle();
     }
 })
-
 titleInput.addEventListener('focusout', () => {
     updateTitle();
 })
 
-// UPDATE HTML AND LOCAL STORAGE + DEFAULT TITLE
-function updateTitle(){
-    let newTitle = titleInput.value;
-    localStorage.setItem('title', newTitle)
-    title.innerText = localStorage.getItem('title');
-    titleInput.classList.add('hidden');
-    title.classList.remove('hide')
-
-    if(titleInput.value == ''){
-        title.innerText = "John Doe's Dashboard"
-    }
-}
-
+/////////////////////
 // FUNCTION ADD LINKS
 /////////////////////
 const linkList = document.querySelector('.links');
@@ -89,14 +95,29 @@ const regexURL = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+
 let links = [];
 let url;
 
-// DISPLAY INPUT ON DOUBLE CLICK
+// GET FAVICON AND ADD HTML TEMPLATE FOR LINKS
+function displayLink(url, name) {
+    const getDomain = new URL(url);
+    const domainName = getDomain.hostname;
+    const tmp = `
+    <div class="link witem relative">
+        <div class="icon-container">
+        <img src="https://icon.horse/icon/${domainName}" class="icon"></div>
+        <a href='${url}' target='_blank'>${name}</a>
+        <i class="close material-symbols-outlined md-15" data-id=${url}>do_not_disturb_on</i>
+    </div>
+    `;
+    linkList.innerHTML += tmp;
+}
+
+// DISPLAY LINK INPUT ON DOUBLE CLICK
 addLinkBtn.addEventListener('click', () => {
     linkInput.classList.remove('hidden');
     addLinkBtn.classList.add('hide')
     linkInput.focus();
 })
 
-// ON ENTER AND VALID INPUT SAVE URL VALUE AND DISPLAY NEXT INPUT
+// ON ENTER AND VALID INPUT SAVE URL VALUE AND DISPLAY NAME INPUT
 linkInput.addEventListener('keydown', (e) => {
     if(e.keyCode != 13) return
 
@@ -154,25 +175,13 @@ nameInput.addEventListener('focusout', () => {
     addLinkBtn.classList.remove('hide');
 })
 
-// GET FAVICON AND ADD HTML TEMPLATE FOR LINKS
-function displayLink(url, name) {
-    const getDomain = new URL(url);
-    const domainName = getDomain.hostname;
-    const tmp = `
-    <div class="link witem relative">
-        <div class="icon-container">
-        <img src="https://icon.horse/icon/${domainName}" class="icon"></div>
-        <a href='${url}' target='_blank'>${name}</a>
-        <i class="close material-symbols-outlined md-15" data-id=${url}>do_not_disturb_on</i>
-    </div>
-    `;
-    linkList.innerHTML += tmp;
-}
 
+////////////////////////
 // FUNCTION CLOSE BUTTON
 ////////////////////////
-// REMOVE ELEMENT AND FILTER LOCAL STORAGE
-// NOT AN OPTION TO HAVE TWO IDENTICAL LINKS
+
+// REMOVE PARENT ELEMENT OF CLICKED CLOSE ICON
+// FILTER OUT FROM LOCAL STORAGE
 linkList.addEventListener('click', (e) => {
     if(e.target.classList.contains('close')){
         links = JSON.parse(localStorage.getItem('links'));
@@ -185,9 +194,12 @@ linkList.addEventListener('click', (e) => {
     }
 });
 
+
+/////////////////
 // FUNCTION NOTES
 /////////////////
-// SAVES ON FOCUS OUT AND KEYPRESS, UPDATING VIA KEYBOARD LOSES EVERYTHING NOT SAVED
+
+// SAVES NOTES ON FOCUS OUT AND KEYPRESS
 const text_area = document.querySelector('.text-area');
 ['keydown', 'focusout'].forEach(evt => {
     text_area.addEventListener(evt, () => {
@@ -196,8 +208,10 @@ const text_area = document.querySelector('.text-area');
     })
 })
 
+///////////////////
 // FUNCTION WEATHER
 ///////////////////
+
 // GET POSITION VIA BROWSER API
 navigator.geolocation.getCurrentPosition((position) => {
     const lat = position.coords.latitude;
@@ -206,24 +220,26 @@ navigator.geolocation.getCurrentPosition((position) => {
 });
 
 // FETCH WEATHER FORECAST FROM WEATHER API 
+// 3 PARAMETERS WITH DEFAULT VALUES TO CALL WITH EITHER URL OR LAT/LON
 async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
     displayWeather(data); 
 }
 
-// GET WEATHER WITH NEW LOCATION ON ENTER
+// GET NEW LOCATION ON ENTER AND FETCH WITH QUERY
 const city = document.querySelector('.location-input');
 city.addEventListener('keydown', (e) => {
     if(e.keyCode != 13) return
-    const newPlace = city.value;
-    getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${newPlace}&days=3&lang=sv`)
+    getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${city.value}&days=3&lang=sv`)
 })
 
 // DISPLAY WEATHER FROM WEATHER API
+// CLEAR THE CONTAINER THEN LOOP THROUGH DAYS IN FORECAST
+// CURRENT VALUE FOR TODAY AND AVERAGE VALUES FOR FORECAST
 function displayWeather(data){
-    const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
-    const container = document.querySelector('.all-weathers')
+    const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'];
+    const container = document.querySelector('.all-weathers');
     let dayNow;
     container.innerHTML = '';
     city.value = data.location.name;
@@ -265,14 +281,16 @@ function displayWeather(data){
     }
 }
 
+////////////////////////////
 // FUNCTION BACKGROUND IMAGE
 ////////////////////////////
+
 // GET DATA FROM UNSPLASH API
-async function getImage(url = `https://api.unsplash.com/photos/random?query=wallpaper&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
+// FALLBACK BG IF FETCH FAILS
+async function getImage(url = `https://api.unsplash.com/photos/random?query=1920x1080&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
     const response = await fetch(url);
     if(response.ok){
         const data = await response.json();
-        console.log(data)
         displayBackground(data)
     } else {
         document.body.style.setProperty('--bg-img', "url('./img/default.jpg')");
@@ -280,15 +298,27 @@ async function getImage(url = `https://api.unsplash.com/photos/random?query=wall
     }
 }
 
-// CUT IMAGE TO CORRECT DIMENSIONS BASED ON WINDOW SIZE AND UPDATE CSS ROOT VARIABLE
+// UPDATE BG IMG WITH CSS ROOT VARIABLE
 // CREDIT PHOTOGRAPHER
 function displayBackground(data) {
     const creditContainer = document.querySelector('.photographer');
     const credit = data[0].user.name;
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    // Change dpr=2 to get better quality images
-    const bg = `url('${data[0].urls.raw}&h=${h}&w=${w}&dpr=1')`;
+    
+    // SLOWER BUT HIGHER QUALITY IMAGE
+    // CUT IMAGE TO CORRECT DIMENSIONS BASED ON WINDOW SIZE AND UPDATE CSS ROOT VARIABLE
+    // const w = window.innerWidth;
+    // const h = window.innerHeight;
+    // const bg = `url('${data[0].urls.raw}&h=${h}&w=${w}&dpr=2')`;
+
+    // A LITTLE FASTER WITH A LITTLE BETTER QUALITY
+    // const bg = `url('${data[0].urls.regular}&dpr=2')`;
+
+    // INCONSISTENT LOADING TIME, DECENT QUALITY
+    // const bg = `url('${data[0].urls.full}')`;
+
+    // FASTEST BUT POOR QUALITY IMAGE
+    const bg = `url('${data[0].urls.regular}')`;
+
     document.body.style.setProperty('--bg-img', bg);
     creditContainer.innerText = `Photo by: ${credit}`;
 }
@@ -299,6 +329,7 @@ bgBtn.addEventListener('click', () => {
     getImage();
 })
 
+////////////////////
 // FUNCTION BG QUERY
 // UNBSPLASH RATE LIMIT 50 PICS/HOUR
 ////////////////////////////////////
@@ -334,8 +365,10 @@ queryInput.addEventListener('keydown', (e) => {
     }
 })
 
+/////////////////////////
 // FUNCTION CAT FACTS API
 /////////////////////////
+
 // GET DATA FROM API
 async function getCatFact() {
     const response = await fetch('https://cat-fact.herokuapp.com/facts');
