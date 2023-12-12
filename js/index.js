@@ -15,7 +15,7 @@ function addFromStorage() {
         });
     }
     if(localStorage.getItem('notes')){
-        text_area.value = localStorage.getItem('notes');
+        textArea.value = localStorage.getItem('notes');
     }
     setDate();
     setTime();
@@ -92,7 +92,7 @@ titleInput.addEventListener('focusout', () => {
 const linkContainer = document.querySelector('.link-container');
 const addLinkBtn = document.querySelector('.add-btn');
 const linkInput = document.querySelector('.link-input');
-const nameInput = document.querySelector('.name-input')
+const nameInput = document.querySelector('.name-input');
 const regexURL = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 let links = [];
 let url;
@@ -101,14 +101,13 @@ let url;
 function displayLink(url, name) {
     const getDomain = new URL(url);
     const domainName = getDomain.hostname;
-    const tmp = `
-    <div class="link witem relative">
+    const tmp = 
+    `<div class="link witem relative">
         <div class="icon-container">
         <img src="https://icon.horse/icon/${domainName}" class="icon"></div>
         <a href='${url}' target='_blank'>${name}</a>
         <i class="close material-symbols-outlined md-15" data-id=${url}>do_not_disturb_on</i>
-    </div>
-    `;
+    </div>`;
     linkContainer.innerHTML += tmp;
 }
 
@@ -158,7 +157,7 @@ nameInput.addEventListener('keydown', (e) => {
         nameInput.value = ''
         nameInput.classList.add('hidden');
         displayLink(url, name)
-    }    
+    }
 })
 
 // HIDE INPUT WHEN UNFOCUSING
