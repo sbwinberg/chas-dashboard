@@ -4,11 +4,11 @@
 * Väderbeskrivning var svårt att få kortfattad. Nu är det bara sista ordet i beskrivningen som kommer med (funkar oftast men blir ibland "närheten" eller "molnighet")(Finns ingen kortfattad beskrivning i datan så måste isåfall lägga till massa if-statements och manuella beskrivningar).
 * Många olika inputs och valideringar som blir kluriga att hålla koll på.
 * Anteckningarna sparar inte sista tecknet vid uppdatering om inte användaren har focused out.
-* Stökigt med variabelnamn som blivit rätt lika och skiljer sig från HTML
 * Ser bara bra ut på desktop, ingen tablet- eller mobilversion
 * Hittade inget sätt att hämta bilder med bra mått (Trots landscape och 1920x1080 query).
 * Cat fact displayen är rätt ful.
 * Bakgrundbilden blir blank när nya bakgrundsbilden laddar in.
+* Offentliga API:er som tack och lov är gratisanvändning endast
   
   
 
