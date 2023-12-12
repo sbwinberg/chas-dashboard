@@ -29,8 +29,6 @@
   
   
 ## Att göra
-* Håller på att försöka göra om koden så att användaren inte kan använda input för att ändra innerHTML
 * Städa upp och flytta globala variabler
-* Försöka städa upp if-satserna
 * Ha kvar nuvarande bakgrundsbild tills nästa laddat in
   
