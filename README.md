@@ -21,6 +21,7 @@
 * Visar dag och månad(på svenska) istället för en siffra 😲
 * HTML title attribute som ger instruktioner för användning på hover.
 * Bakgrundbilden har en default och en fallback!
+* Försökt så gott jag kan att strukturera upp och kommentera min kod
 
 ## Neutralt? (Svårt att bestämma om detta är bra eller dåligt)
 * Link-input tar bara kompletta länkar, enligt regex(hämtad från nätet)(Positivt? kanske men jobbigt att skriva hela url:er)
