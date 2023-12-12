@@ -19,6 +19,7 @@ function addFromStorage() {
     setTime();
     setInterval(setTime, 1000);
     setInterval(setDate, 60000)
+    getCatFact();
 }
 
 // FUNCTION SET TIME AND DATE
@@ -186,17 +187,13 @@ linkList.addEventListener('click', (e) => {
 
 // FUNCTION NOTES
 /////////////////
-// SAVES ON FOCUS OUT, UPDATING VIA KEYBOARD LOSES EVERYTHING NOT SAVED
+// SAVES ON FOCUS OUT AND KEYPRESS, UPDATING VIA KEYBOARD LOSES EVERYTHING NOT SAVED
 const text_area = document.querySelector('.text-area');
-text_area.addEventListener('focusout', () => {
-    const notes = text_area.value;
-    localStorage.setItem('notes', notes);
-})
-
-// SAVES EVERY KEYPRESS BUT MISSES LAST KEY
-text_area.addEventListener('keydown', () => {
-    const notes = text_area.value;
-    localStorage.setItem('notes', notes);
+['keydown', 'focusout'].forEach(evt => {
+    text_area.addEventListener(evt, () => {
+        const notes = text_area.value;
+        localStorage.setItem('notes', notes);
+    })
 })
 
 // FUNCTION WEATHER
@@ -212,13 +209,11 @@ navigator.geolocation.getCurrentPosition((position) => {
 async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
-    console.log(data);
     displayWeather(data); 
 }
 
 // GET WEATHER WITH NEW LOCATION ON ENTER
 const city = document.querySelector('.location-input');
-
 city.addEventListener('keydown', (e) => {
     if(e.keyCode != 13) return
     const newPlace = city.value;
@@ -229,43 +224,44 @@ city.addEventListener('keydown', (e) => {
 function displayWeather(data){
     const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
     const container = document.querySelector('.all-weathers')
+    let dayNow;
     container.innerHTML = '';
     city.value = data.location.name;
-    let short = data.forecast.forecastday;
     
     for(let obj in data.forecast.forecastday){
-        const fullWeather = short[obj].day.condition.text.split(' ');
+        const short = data.forecast.forecastday[obj];
+        const fullWeather = short.day.condition.text.split(' ');
         let shortWeather = fullWeather[fullWeather.length -1];
         shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1);
-        let day;
-        let temp = short[obj].day.avgtemp_c;
+        let temp = short.day.avgtemp_c;
+        let condition = short.day.condition.text;
+        let icon = short.day.condition.icon;
 
         if(obj == 0){ 
-            const date = new Date()
-            const now = date.getHours() - 1;
-            console.log(now)
-            day = 'Idag';
-            temp = short[obj].hour[now].temp_c;
+            dayNow = 'Idag';
+            temp = data.current.temp_c;
+            condition = data.current.condition.text;
+            icon = data.current.condition.icon;
         }
-        else if (obj == 1){ day = 'Imorgon'}
+        else if (obj == 1){ dayNow = 'Imorgon'}
         else {
-            const currentDay = new Date(short[obj].date);
-            day = weekdays[currentDay.getDay()]
+            const currentDay = new Date(short.date);
+            dayNow = weekdays[currentDay.getDay()];
         }
         let tmp = 
         `<div class="weater-today weather-container witem">
                 <div class='image-container'> 
-                    <img src=${short[obj].day.condition.icon} alt=${short[obj].day.condition.text} class="weather-image">
+                    <img src=${icon} alt=${condition} class="weather-image">
                 </div>
                 <div class="weather-info">
-                    <div class="day">${day}</div>
+                    <div class="day">${dayNow}</div>
                     <div class="temp-and-such">
                         <div class="temp">${temp}&deg;C</div>
                         <div class="such">${shortWeather}</div>
                     </div>
                 </div>
-            </div>`
-        container.innerHTML += tmp
+            </div>`;
+        container.innerHTML += tmp;
     }
 }
 
@@ -276,6 +272,7 @@ async function getImage(url = `https://api.unsplash.com/photos/random?query=wall
     const response = await fetch(url);
     if(response.ok){
         const data = await response.json();
+        console.log(data)
         displayBackground(data)
     } else {
         document.body.style.setProperty('--bg-img', "url('./img/default.jpg')");
@@ -284,11 +281,16 @@ async function getImage(url = `https://api.unsplash.com/photos/random?query=wall
 }
 
 // CUT IMAGE TO CORRECT DIMENSIONS BASED ON WINDOW SIZE AND UPDATE CSS ROOT VARIABLE
+// CREDIT PHOTOGRAPHER
 function displayBackground(data) {
+    const creditContainer = document.querySelector('.photographer');
+    const credit = data[0].user.name;
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const bg = `url('${data[0].urls.raw}&h=${h}&w=${w}&dpr=2')`;
+    // Change dpr=2 to get better quality images
+    const bg = `url('${data[0].urls.raw}&h=${h}&w=${w}&dpr=1')`;
     document.body.style.setProperty('--bg-img', bg);
+    creditContainer.innerText = `Photo by: ${credit}`;
 }
 
 // GET NEW IMAGE ON CLICK
@@ -324,8 +326,8 @@ queryInput.addEventListener('keydown', (e) => {
     if(queryInput.value == ''){
         queryInput.classList.add('hidden')
     } else {
-        let query = queryInput.value;
-        let url = `https://api.unsplash.com/photos/random?query=${query}&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`
+        const query = queryInput.value;
+        const url = `https://api.unsplash.com/photos/random?query=${query}&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`
         queryInput.value = '';
         queryInput.classList.add('hidden');
         getImage(url);
@@ -339,7 +341,7 @@ async function getCatFact() {
     const response = await fetch('https://cat-fact.herokuapp.com/facts');
     const data = await response.json();
     displayCatFact(data)
-} getCatFact();
+}
 
 // DISPLAY RANDOM ONE OF AVAILABLE CAT FACTS
 function displayCatFact(data) {
