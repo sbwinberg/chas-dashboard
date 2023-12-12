@@ -9,6 +9,7 @@
 * Cat fact displayen är rätt ful.
 * Bakgrundbilden blir blank när nya bakgrundsbilden laddar in.
 * Offentliga API:er som tack och lov är gratisanvändning endast
+* Strular med deployment av sidan så den visas olika på olika enheter.
   
   
 
