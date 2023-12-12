@@ -234,7 +234,7 @@ async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1
 const locationInput = document.querySelector('.location-input');
 locationInput.addEventListener('keydown', (e) => {
     if(e.keyCode != 13) return
-    getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${city.value}&days=3&lang=sv`)
+    getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${locationInput.value}&days=3&lang=sv`)
 })
 
 // DISPLAY WEATHER FROM WEATHER API
