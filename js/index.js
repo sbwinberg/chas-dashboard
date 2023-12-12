@@ -146,7 +146,9 @@ nameInput.addEventListener('keydown', (e) => {
     if(name == ''){
         nameInput.classList.add('hidden');
     } else {
-        links = JSON.parse(localStorage.getItem('links'));
+        if(JSON.parse(localStorage.getItem('links'))){
+            links = JSON.parse(localStorage.getItem('links'));
+        }
         let link = {
             'link' : `${url}`,
             'name' : `${name}`
