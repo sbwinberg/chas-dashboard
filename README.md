@@ -12,6 +12,8 @@
 * Strular med deployment av sidan så den visas olika på olika enheter.
 * Oklart nog fungerar den felfritt i mitt chrome men inte i andras chrome.
 * Många funktionaliteter går bara i Chrome
+* CSSen blir konstig i andra webbläsare
+
   
   
 
