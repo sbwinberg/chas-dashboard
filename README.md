@@ -10,6 +10,8 @@
 * Bakgrundbilden blir blank när nya bakgrundsbilden laddar in.
 * Offentliga API:er som tack och lov är gratisanvändning endast
 * Strular med deployment av sidan så den visas olika på olika enheter.
+* Oklart nog fungerar den felfritt i mitt chrome men inte i andras chrome.
+* Många funktionaliteter går bara i Chrome
   
   
 
@@ -33,4 +35,5 @@
 ## Att göra
 * Städa upp och flytta globala variabler
 * Ha kvar nuvarande bakgrundsbild tills nästa laddat in
+* Funktionell i andra webbläsare
   
