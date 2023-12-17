@@ -204,11 +204,8 @@ linkContainer.addEventListener('click', (e) => {
 
 // SAVES NOTES ON FOCUS OUT AND KEYPRESS
 const textArea = document.querySelector('.text-area');
-['keydown', 'focusout'].forEach(evt => {
-    textArea.addEventListener(evt, () => {
-        const notes = textArea.value;
-        localStorage.setItem('notes', notes);
-    })
+textArea.addEventListener('input', () => {
+    localStorage.setItem('notes', textArea.value);
 })
 
 ///////////////////
