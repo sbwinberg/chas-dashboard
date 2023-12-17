@@ -214,6 +214,7 @@ const textArea = document.querySelector('.text-area');
 ///////////////////
 // FUNCTION WEATHER
 ///////////////////
+const weatherContainer = document.querySelector('.weather-container');
 
 // GET POSITION VIA BROWSER API
 navigator.geolocation.getCurrentPosition((position) => {
@@ -227,7 +228,8 @@ navigator.geolocation.getCurrentPosition((position) => {
 async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
-    displayWeather(data); 
+    if(response.ok) displayWeather(data);
+    else weatherContainer.innerText = "Something went wrong, no weather today!"
 }
 
 // GET NEW LOCATION ON ENTER AND FETCH WITH QUERY
@@ -242,7 +244,6 @@ locationInput.addEventListener('keydown', (e) => {
 // CURRENT VALUE FOR TODAY AND AVERAGE VALUES FOR FORECAST
 function displayWeather(data){
     const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag'];
-    const weatherContainer = document.querySelector('.weather-container');
     let dayNow;
     weatherContainer.innerHTML = '';
     locationInput.value = data.location.name;
