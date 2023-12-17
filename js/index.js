@@ -376,7 +376,8 @@ queryInput.addEventListener('keydown', (e) => {
 async function getCatFact() {
     const response = await fetch('https://cat-fact.herokuapp.com/facts');
     const data = await response.json();
-    displayCatFact(data)
+    if(response.ok) displayCatFact(data);
+    else catFact.innerText = "Looks like we're all out of cat facts:/"
 }
 
 // DISPLAY RANDOM ONE OF AVAILABLE CAT FACTS
