@@ -225,7 +225,10 @@ navigator.geolocation.getCurrentPosition((position) => {
 async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
-    if(response.ok) displayWeather(data);
+    if(response.ok){
+        displayWeather(data);
+        console.log(data)
+    } 
     else weatherContainer.innerText = "Something went wrong, no weather today!"
 }
 
@@ -247,12 +250,16 @@ function displayWeather(data){
     
     for(let obj in data.forecast.forecastday){
         const short = data.forecast.forecastday[obj];
-        const fullWeather = short.day.condition.text.split(' ');
-        let shortWeather = fullWeather[fullWeather.length -1];
-        shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1);
         let temp = short.day.avgtemp_c;
         let condition = short.day.condition.text;
         let icon = short.day.condition.icon;
+
+        // Ful-lösning för att bli av med beskrivning "Närheten"
+        let shortWeather;
+        const fullWeather = short.day.condition.text.split(' ');
+        if(fullWeather[fullWeather.length - 1] === 'närheten') shortWeather = fullWeather[fullWeather.length - 3]
+        else shortWeather = fullWeather[fullWeather.length -1];
+        shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1);
 
         if(obj == 0){ 
             dayNow = 'Idag';
