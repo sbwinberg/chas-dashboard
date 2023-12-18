@@ -42,7 +42,6 @@ function setTime() {
 function setDate() {
     const dateNow = new Date();
     const options = {
-        // weekday: "long",
         year: "numeric",
         month: "long",
         day: "numeric"
@@ -224,7 +223,7 @@ navigator.geolocation.getCurrentPosition((position) => {
 
 // FETCH WEATHER FORECAST FROM WEATHER API 
 // 3 PARAMETERS WITH DEFAULT VALUES TO CALL WITH EITHER URL OR LAT/LON
-async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
+async function getWeather(lat, lon, url = `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${lat},${lon}&days=3&lang=sv`){
     const response = await fetch(url)
     const data = await response.json();
     if(response.ok){
@@ -237,8 +236,7 @@ async function getWeather(lat = 0, lon = 0, url = `https://api.weatherapi.com/v1
 // GET NEW LOCATION ON ENTER AND FETCH WITH QUERY
 const locationInput = document.querySelector('.location-input');
 locationInput.addEventListener('keydown', (e) => {
-    if(e.keyCode != 13) return
-    getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${locationInput.value}&days=3&lang=sv`)
+    e.keyCode != 13 ? null : getWeather(0 , 0 , `https://api.weatherapi.com/v1/forecast.json?key=25a21f44ab1f402584c160402232711&q=${locationInput.value}&days=3&lang=sv`)
 })
 
 // DISPLAY WEATHER FROM WEATHER API
@@ -259,8 +257,7 @@ function displayWeather(data){
         // Ful-lösning för att bli av med beskrivning "Närheten"
         let shortWeather;
         const fullWeather = short.day.condition.text.split(' ');
-        if(fullWeather[fullWeather.length - 1] === 'närheten') shortWeather = fullWeather[fullWeather.length - 3]
-        else shortWeather = fullWeather[fullWeather.length -1];
+        fullWeather[fullWeather.length - 1] === 'närheten' ? shortWeather = fullWeather[fullWeather.length - 3] : shortWeather = fullWeather[fullWeather.length -1];
         shortWeather = shortWeather[0].toUpperCase() + shortWeather.slice(1);
 
         if(obj == 0){ 
@@ -299,8 +296,8 @@ function displayWeather(data){
 // FALLBACK BG IF FETCH FAILS
 async function getImage(url = `https://api.unsplash.com/photos/random?query=1920x1080&count=1&orientation=landscape&client_id=eTEJDG-hpE5fzr60ehDGE_qEifMHQXo1Da67SzTYRr4`) {
     const response = await fetch(url);
+    const data = await response.json();
     if(response.ok){
-        const data = await response.json();
         displayBackground(data)
     } else {
         document.body.style.setProperty('--bg-img', "url('./img/default.jpg')");
@@ -314,6 +311,13 @@ function displayBackground(data) {
     const creditContainer = document.querySelector('.photographer');
     const credit = data[0].user.name;
     
+    const img = new Image();
+    img.onload = function(){
+        document.body.style.setProperty('--bg-img', bg);
+        creditContainer.innerText = `Photo by: ${credit}`;
+    }
+    img.src = `${data[0].urls.full}`
+    if(img.complete) img.onload();
     // SLOWER BUT HIGHER QUALITY IMAGE
     // CUT IMAGE TO CORRECT DIMENSIONS BASED ON WINDOW SIZE AND UPDATE CSS ROOT VARIABLE
     // const w = window.innerWidth;
@@ -324,13 +328,12 @@ function displayBackground(data) {
     // const bg = `url('${data[0].urls.regular}&dpr=2')`;
 
     // INCONSISTENT LOADING TIME, DECENT QUALITY
-    // const bg = `url('${data[0].urls.full}')`;
+    const bg = `url('${data[0].urls.full}')`;
 
     // FASTEST BUT POOR QUALITY IMAGE
-    const bg = `url('${data[0].urls.regular}')`;
+    // const bg = `url('${data[0].urls.regular}')`;
 
-    document.body.style.setProperty('--bg-img', bg);
-    creditContainer.innerText = `Photo by: ${credit}`;
+
 }
 
 // GET NEW IMAGE ON CLICK
