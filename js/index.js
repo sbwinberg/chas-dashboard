@@ -1,9 +1,9 @@
 // FUNCTION LOAD FROM LOCAL STORAGE
 ///////////////////////////////////
-window.addEventListener('load', addFromStorage);
+document.addEventListener('DOMContentLoaded', addFromStorage);
 
 // SET TIME AND DATE THEN KEEP THEM UPDATED
-// IF ANY DISPLAY ITEMS IN LOCAL STORAGE
+// IF ANY, DISPLAY ITEMS IN LOCAL STORAGE
 function addFromStorage() {
     if(localStorage.getItem('title')){
         title.innerText = localStorage.getItem('title');
@@ -41,12 +41,14 @@ function setTime() {
 // GET MONTH NAME FROM ARRAY(TRIED WITH .LOCALEDATESTRING)
 function setDate() {
     const dateNow = new Date();
-    const day = dateNow.getDate();
-    const months = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December']
-    const monthIndex = dateNow.getMonth();
-    const month = months[monthIndex]
-    const year = dateNow.getFullYear();
-    dateContainer.innerText = `${day} ${month} ${year}`;
+    const options = {
+        // weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    }
+    const date = dateNow.toLocaleDateString("sv-SE", options)
+    dateContainer.innerText = date;
 }
 
 ////////////////////////
